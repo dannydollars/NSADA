@@ -1,7 +1,6 @@
 {
-  "name": "",
+  "name": "nsada",
   "version": "1.0.0",
-  "description": "",
   "main": "src/functions/*.js",
   "scripts": {
     "start": "func start",
@@ -12,5 +11,16 @@
   },
   "devDependencies": {
     "azure-functions-core-tools": "^4.x"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dannydollars/NSADA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dannydollars/NSADA/issues"
+  },
+  "homepage": "https://github.com/dannydollars/NSADA#readme",
+  "description": ""
 }

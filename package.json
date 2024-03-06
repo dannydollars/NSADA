@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/dannydollars/NSADA/issues"
   },
-  "homepage": "https://github.com/dannydollars/NSADA#readme"
+  "homepage": "https://github.com/dannydollars/NSADA#readme",
+  "dependencies": {
+    "axios": "^1.6.7"
+  }
 }

@@ -43,7 +43,8 @@ for (item of array){
 const deets = {
 name:item.properties.name,
 city:item.properties.city,
-website:item.properties.website
+website:item.properties.website,
+hubspotID:item.id
 }
 prepped.push(deets)    
 }
@@ -65,7 +66,7 @@ return list
 
     context.res = {
         status: 200,
-        body: makeHTML(prepList(associates))
+        body: prepList(associates)
     };
 
 };

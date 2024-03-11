@@ -1,7 +1,12 @@
 module.exports = async function (context, req) {
-   context.log(req.body)
  
- 
+ async function parsereq(req) {
+const deets = JSON.parse(req.body);
+context.log(deets.objectId)
+
+ }
+
+ parsereq(req);
   // Your code logic goes here
  
      context.res = {

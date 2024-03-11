@@ -1,8 +1,6 @@
 module.exports = async function (context, req) {
- try { const body = JSON.parse(req.body)
-    context.log(body)}
-    catch (error) {context.log(error)}
- 
+
+ context.log(req.body[0].objectId)
  
   // Your code logic goes here
  

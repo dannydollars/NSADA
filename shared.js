@@ -67,4 +67,68 @@ if (type==="dealers"){
     return dealers};
 }
 
-module.exports = {retrieveCompanies,getAssociates,prepList}
+async function retrievePosts(page,array) {
+    const allPosts = array;
+    console.log(page);
+    if(page==1) {console.log(page)}
+const url = process.env["WORDPRESS_POST_URL"]+'?per_page=100'+'&page='+page;
+console.log(url)
+res = await axios.get(url)
+allPosts.push(...res.data);
+if(res.headers['x-wp-totalpages']>page){
+return retrievePosts(page+1,allPosts);
+
+}
+else {
+    return allPosts;}
+}
+
+async function loadOnePost(url,company){
+    const username = process.env["USER"];
+    company.status='publish';
+    JSON.stringify(company)
+const password = process.env["PASS"];
+const uncoded = username+":"+password;
+const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
+
+try { const response = await axios.post(url,JSON.stringify(company),{headers: {
+        'Content-Type': 'application/json',
+        Authorization: auth,
+    }},    
+    );
+    return response;}
+    catch (error) {
+        console.error(error);
+    }
+}
+async function getDetailsFromHubspot (HubspotID){
+    const url = process.env["SINGLE_URL"]+HubspotID+opts;
+    const token = 'Bearer ' + process.env["HUBSPOT_API_KEY"];
+    try{
+    const response = await axios.get(url, {
+        headers: {
+            Authorization: token
+        }
+    })
+        return response.data;}
+        catch(err) {console.log(err)}
+
+}
+
+async function deleteOnePost(url){
+    const username = process.env["USER"];
+const password = process.env["PASS"];
+const uncoded = username+":"+password;
+const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
+
+try { const response = await axios.delete(url,{headers: {
+        'Content-Type': 'application/json',
+        Authorization: auth,
+    }},    
+    );
+    return response;}
+    catch (error) {
+        console.error(error);
+    }
+}
+module.exports = {retrieveCompanies, retrievePosts,getAssociates,prepList,loadOnePost,getDetailsFromHubspot,deleteOnePost}

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const {getAssociates,prepList,retrieveCompanies} = require('../shared.js');
+const {getAssociates,prepList,retrieveCompanies,matchFromHook} = require('../shared.js');
 const wordpressPostUrl = process.env["WORDPRESS_POST_URL"];
 
 async function loadToWordPress(url, array){
@@ -45,23 +45,35 @@ else {console.log(allPosts.length);
 }
 async function main() {
 const Associates = await retrieveCompanies('associates');
+console.log(Associates.length)
 const Dealers = await retrieveCompanies('dealers');
 const preppedAss = prepList(Associates);
 const preppedDealers = prepList(Dealers);
 const wpposts = await retrievePosts(1,[]);
+console.log(wpposts.length);
+for (item of preppedAss) 
+    {
+        const matchingAssociate = wpposts.find(associate => associate.HubspotID === item.HubspotID);
+        if(matchingAssociate) {
+const post = await loadOnePost(wordpressPostUrl+"/"+matchingAssociate.id,item);
+console.log(matchingAssociate.HubspotID)
+        }
+     else {   const post = await loadOnePost(wordpressPostUrl,item);
+
+    }
 
 for (item of wpposts){
-console.log(item.title.rendered + item.HubspotID);
+// console.log(item.title.rendered + item.HubspotID);
 const matchingAssociate = preppedAss.find(associate => associate.HubspotID === item.HubspotID);
-    if (matchingAssociate) {
-      const post = await loadOnePost(wordpressPostUrl+"/"+item.id,matchingAssociate);
-      console.log(post);
-    }
-    else {const post = await loadOnePost(wordpressPostUrl,matchingAssociate)}
+     if (matchingAssociate) {
+            console.log("match");
+        }
 
-}
+else {console.log("deleted")}
 
-}
+ }
+
+}}
 module.exports = async function (context, req) {
    main();
 

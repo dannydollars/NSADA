@@ -102,7 +102,7 @@ try { const response = await axios.post(url,JSON.stringify(company),{headers: {
     }
 }
 async function getDetailsFromHubspot (HubspotID){
-    const url = process.env["SINGLE_URL"]+HubspotID+opts;
+    const url = process.env["SINGLE_URL"]+HubspotID+"?properties=name,city,website,associate_member_or_dealer_member";
     const token = 'Bearer ' + process.env["HUBSPOT_API_KEY"];
     try{
     const response = await axios.get(url, {
@@ -131,4 +131,36 @@ try { const response = await axios.delete(url,{headers: {
         console.error(error);
     }
 }
-module.exports = {retrieveCompanies, retrievePosts,getAssociates,prepList,loadOnePost,getDetailsFromHubspot,deleteOnePost}
+
+async function matchFromHook(company,action,propertyName,propertyValue)
+{
+ const comp = await getDetailsFromHubspot(company);
+if(!comp) {return}
+if(comp.properties.associate_member_or_dealer_member!=="Associate") {return}
+switch (action) {
+    case "company.propertyChange":
+        const deets = {
+            title:comp.properties.name,
+            City:comp.properties.city,
+            Website:comp.properties.website,
+            HubspotID:comp.id
+            }
+            console.log(deets)
+            const wpposts = await retrievePosts(1,[]);
+            const matchingAssociate = wpposts.find(associate => associate.HubspotID === deets.HubspotID);
+if(matchingAssociate) {
+            const post = await loadOnePost(process.env["WORDPRESS_POST_URL"]+"/"+matchingAssociate.id,deets);}
+        break;
+    case "company.creation":
+        break;
+    case "company.deletion":
+        break;
+    case "company.merge":
+        break;
+    case "company.restore":
+}
+}
+
+
+
+module.exports = {retrieveCompanies, retrievePosts,getAssociates,prepList,loadOnePost,getDetailsFromHubspot,deleteOnePost,matchFromHook}

@@ -142,11 +142,13 @@ async function matchFromHook(company,action,propertyName,propertyValue)
             console.log("deleting")
         return await deleteOnePost(process.env["WORDPRESS_POST_URL"]+'/'+matchingAssociate.id);}
     }
+
 const comp = await getDetailsFromHubspot(company);
 if(!comp) {return undefined}
 
-if (action==="company.propertyChange")
+if (action==="company.propertyChange" && comp.associate_member_or_dealer_member==="Associate")
 {
+
     const deets = {
         title:comp.properties.name,
         City:comp.properties.city,

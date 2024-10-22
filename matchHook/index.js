@@ -3,8 +3,9 @@ const {getAssociates,prepList,retrieveCompanies,matchFromHook} = require('../sha
 const wordpressPostUrl = process.env["WORDPRESS_POST_URL"];
 
 module.exports = async function (context, req) {
-context.log(context)
 const content = context.req.body[0];
+context.log(content)
+
    const whatrec = await matchFromHook(content.objectId,content.subscriptionType,content.propertyName,content.propertyValue);
    context.res = {
         status: 200,

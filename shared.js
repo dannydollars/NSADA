@@ -144,7 +144,7 @@ async function matchFromHook(company,action,propertyName,propertyValue)
     }
 
 const comp = await getDetailsFromHubspot(company);
- return comp;
+ return "dogs";
 // if(!comp) {return undefined}
 
 // if (action==="company.propertyChange")

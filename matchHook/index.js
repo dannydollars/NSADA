@@ -7,6 +7,7 @@ const content = context.req.body[0];
 context.log(content)
 
    const whatrec = await matchFromHook(content.objectId,content.subscriptionType,content.propertyName,content.propertyValue);
+   context.log(whatrec)
    context.res = {
         status: 200,
         body: 'Azure Function executed successfully.'

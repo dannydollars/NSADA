@@ -144,23 +144,24 @@ async function matchFromHook(company,action,propertyName,propertyValue)
     }
 
 const comp = await getDetailsFromHubspot(company);
-if(!comp) {return company}
-return "dogs3"
-// if (action==="company.propertyChange")
-// {
 
-//     const deets = {
-//         title:comp.properties.name,
-//         City:comp.properties.city,
-//         Website:comp.properties.website,
-//         HubspotID:comp.id
-//         }
-//         const wpposts = await retrievePosts(1,[]);
-//         const matchingAssociate = wpposts.find(associate => associate.HubspotID === deets.HubspotID);
-// if(matchingAssociate){
-//         await loadOnePost(process.env["WORDPRESS_POST_URL"]+'/'+matchingAssociate.id,deets);}
-//   else {await loadOnePost(process.env["WORDPRESS_POST_URL"],deets);}
-//     }
+if(!comp) {return undefined}
+
+if (action==="company.propertyChange" )
+{
+
+    const deets = {
+        title:comp.properties.name,
+        City:comp.properties.city,
+        Website:comp.properties.website,
+        HubspotID:comp.id
+        }
+        const wpposts = await retrievePosts(1,[]);
+        const matchingAssociate = wpposts.find(associate => associate.HubspotID === deets.HubspotID);
+if(matchingAssociate){
+        await loadOnePost(process.env["WORDPRESS_POST_URL"]+'/'+matchingAssociate.id,deets);}
+  else {await loadOnePost(process.env["WORDPRESS_POST_URL"],deets);}
+    }
 
 // if (action==="company.creation") {
 //     const deets = {

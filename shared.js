@@ -111,7 +111,7 @@ async function getDetailsFromHubspot (HubspotID){
         }
     })
         return response.data;}
-        catch(err) {console.log(err)}
+        catch(err) {return undefined}
 
 }
 
@@ -134,32 +134,44 @@ try { const response = await axios.delete(url,{headers: {
 
 async function matchFromHook(company,action,propertyName,propertyValue)
 {
- const comp = await getDetailsFromHubspot(company);
-if(!comp) {return}
-if(comp.properties.associate_member_or_dealer_member!=="Associate") {return}
-switch (action) {
-    case "company.propertyChange":
-        const deets = {
-            title:comp.properties.name,
-            City:comp.properties.city,
-            Website:comp.properties.website,
-            HubspotID:comp.id
-            }
-            console.log(deets)
-            const wpposts = await retrievePosts(1,[]);
-            const matchingAssociate = wpposts.find(associate => associate.HubspotID === deets.HubspotID);
-if(matchingAssociate) {
-            const post = await loadOnePost(process.env["WORDPRESS_POST_URL"]+"/"+matchingAssociate.id,deets);}
-        break;
-    case "company.creation":
-        break;
-    case "company.deletion":
-        break;
-    case "company.merge":
-        break;
-    case "company.restore":
+    if (action==="company.deletion") {
+        const wpposts = await retrievePosts(1,[]);
+        const matchingAssociate = wpposts.find(associate => associate.HubspotID == company);
+        !matchingAssociate ? console.log('no match') : console.log(matchingAssociate.id)
+        if(matchingAssociate){
+            console.log("deleting")
+        return await deleteOnePost(process.env["WORDPRESS_POST_URL"]+'/'+matchingAssociate.id);}
+    }
+const comp = await getDetailsFromHubspot(company);
+if(!comp) {return undefined}
+
+if (action==="company.propertyChange")
+{
+    const deets = {
+        title:comp.properties.name,
+        City:comp.properties.city,
+        Website:comp.properties.website,
+        HubspotID:comp.id
+        }
+        const wpposts = await retrievePosts(1,[]);
+        const matchingAssociate = wpposts.find(associate => associate.HubspotID === deets.HubspotID);
+if(matchingAssociate){
+        await loadOnePost(process.env["WORDPRESS_POST_URL"]+'/'+matchingAssociate.id,deets);}
+  else {await loadOnePost(process.env["WORDPRESS_POST_URL"],deets);}
+    }
+
+// if (action==="company.creation") {
+//     const deets = {
+//         title:comp.properties.name,
+//         City:comp.properties.city,
+//         Website:comp.properties.website,
+//         HubspotID:comp.id
+//         }
+//     return await loadOnePost(process.env["WORDPRESS_POST_URL"],deets);}
+
+
 }
-}
+
 
 
 

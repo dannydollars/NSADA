@@ -6,10 +6,10 @@ module.exports = async function (context, req) {
 
 const content = context.req.body[0];
 console.log(content)
-   const whatrec = matchFromHook(content.objectId,content.subscriptionType,content.propertyName,content.propertyValue);
-    
-    context.res = {
+   const whatrec = await matchFromHook(content.objectId,content.subscriptionType,content.propertyName,content.propertyValue);
+   context.res = {
         status: 200,
         body: 'Azure Function executed successfully.'
     };
 };
+

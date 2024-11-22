@@ -149,7 +149,7 @@ if(!comp) {return undefined}
 
 if (action==="company.propertyChange" )
 {
-    if(comp.properties.associate_member_or_dealer_member === "associate")
+    if(comp.properties.associate_member_or_dealer_member === "Associate")
 {
     const deets = {
         title:comp.properties.name,

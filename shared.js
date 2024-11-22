@@ -149,7 +149,8 @@ if(!comp) {return undefined}
 
 if (action==="company.propertyChange" )
 {
-
+    if(comp.properties.associate_member_or_dealer_member === "associate")
+{
     const deets = {
         title:comp.properties.name,
         City:comp.properties.city,
@@ -162,7 +163,7 @@ if(matchingAssociate){
         await loadOnePost(process.env["WORDPRESS_POST_URL"]+'/'+matchingAssociate.id,deets);}
   else {await loadOnePost(process.env["WORDPRESS_POST_URL"],deets);}
     }
-
+}
 // if (action==="company.creation") {
 //     const deets = {
 //         title:comp.properties.name,
